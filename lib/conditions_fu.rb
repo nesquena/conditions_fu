@@ -1,0 +1,98 @@
+module ConditionsFu 
+  module Base        
+    # overriden sanitization in order to highjack the way that the condition string is formed
+    # the attribute_condition method needs to have the attribute query object in order to 
+    # determine which operator to apply for the condition
+    def sanitize_sql_hash_for_conditions_with_attribute_queries(attrs)
+      condition_join_string = attrs.delete(:connect) || ' AND ' # ' OR ' or ' AND '
+      attrs = expand_hash_conditions_for_aggregates(attrs)
+      # view_statement("[sanitize] initial attrs", attrs)
+
+      conditions = attrs.map do |attr, value|
+        attr_string = attr.to_s
+
+        # Extract table name from qualified attribute names.
+        if attr_string.include?('.')
+          table_name, attr_string = attr_string.split('.', 2)
+          table_name = connection.quote_table_name(table_name)
+        else
+          table_name = quoted_table_name
+        end
+        
+        # Here is the where the difference occurs: attribute_condition_for_query takes in the attr object
+        # table_name.`quoted_attribute_name` [result of attribute_condition_for_query]
+        "#{table_name}.#{connection.quote_column_name(attr_string)} #{attribute_condition_for_query(attr, value)}"
+      end.join(condition_join_string)
+      
+      # view_statement("[sanitize] conditions", conditions)
+      # view_statement("[sanitize] attrs values", attrs.values)
+      final_result = replace_bind_variables(conditions, expand_range_bind_variables(attrs.values))
+      # view_statement("[sanitize] final result", final_result)
+    end
+    
+    # returns the operator and value portion of the query string for a given condition (i.e "= ?")
+    # the actual operator is determined by the attribute_query type ( i.e :name.gt => '>' )
+    def attribute_condition_for_query(attribute_query, value)
+      # immediately return to regularly scheduled programming if the attribute is a plain old symbol
+      return attribute_condition(value) unless attribute_query.kind_of?(AttributeCondition)
+      
+      # in the case that the attribute is actually a query object, determine the query type
+      case attribute_query.condition_operator # (i.e :gt, :lt, :like, :eql)
+        when :eql  then "= ?"
+        when :lt   then "< ?"
+        when :lte  then "<= ?"
+        when :gt   then "> ?"
+        when :gte  then ">= ?"
+        when :like then "LIKE ?"
+        when :in   then "IN (?)"
+        when :not  then "NOT IN (?)"
+      end
+    end  
+    
+    # similar Model.all which is an alias for Model.find(:all), except concatenates conditions with "OR" instead of "AND"
+    # Model.any(:conditions => { :name.like => "%Na%", :age.gt > 30 }) # => `name` LIKE "%Na" OR `age` > 30
+    def any(*args)
+      options = args.extract_options! # extract the options off the end
+      options[:conditions][:connect] = ' OR ' if options[:conditions] # set the condition_join condition
+      args << options # add options back on the end
+      find(:all, *args)
+    end
+    
+    def view_statement(title, expression)
+      puts "--------->#{title}<----------"
+      puts expression.kind_of?(String) ? "==== #{expression} ======"  : "==== #{expression.inspect} ======" 
+      puts "\n"
+      expression
+    end
+  end
+  
+  # define symbol methods for each possible condition qualifier
+  module SymbolQueryExtensions
+    [ :eql, :lt, :gt, :gte, :lte, :in, :like, :not ].each do |query_operator|
+      define_method(query_operator) do
+        AttributeCondition.new(self, query_operator)
+      end 
+    end
+  end
+  
+  # An attribute condition simply contains an attribute name as well as a condition operator
+  class AttributeCondition
+    # attr_name : String => the attribute that will be used in the condition
+    # operator  : Symbol => the operator which will be used for comparison (i.e :gt, :lt, :like, :eql)
+    attr_accessor :attribute_name, :condition_operator
+  
+    def initialize(attribute_name, condition_operator)
+      @attribute_name, @condition_operator = attribute_name, condition_operator
+    end
+    
+    # returns just the attribute name for simplicity
+    def to_s
+      @attribute_name.to_s
+    end
+    
+    # returns the attribute name as a symbol
+    def to_sym
+      @attribute_name.to_sym
+    end
+  end
+end

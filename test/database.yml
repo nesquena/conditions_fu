@@ -1,0 +1,18 @@
+sqlite3_file:
+  adapter: sqlite3
+  dbfile: conditions_fu.sqlite.db
+sqlite3:
+  adapter: sqlite3
+  database: ":memory:"
+postgresql:
+  adapter: postgresql
+  username: postgres
+  password: postgres
+  database: conditions_fu_test
+  min_messages: ERROR
+mysql:
+  adapter: mysql
+  host: localhost
+  username: conditions_fu
+  password: conditions_fu
+  database: conditions_fu_test

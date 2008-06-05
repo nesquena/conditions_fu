@@ -1,0 +1,61 @@
+# == Schema Information
+# Schema version: 20080605094825
+#
+# Table name: people
+#
+#  id              :integer         not null, primary key
+#  first_name      :string(255)
+#  last_name       :string(255)
+#  occupation      :string(255)
+#  age             :integer
+#  phone           :integer
+#  favorite_number :integer
+#  created_at      :datetime
+#  updated_at      :datetime
+#
+
+nathan:
+  id: 1
+  first_name: Nathan
+  last_name: "Esquenazi"
+  occupation: "Student"
+  age: 21
+  phone: 6267685768
+  favorite_number: 121
+
+bob:
+  id: 2
+  first_name: "Bob"
+  last_name: "Villa"
+  occupation: "Contractor"
+  age: 38
+  phone: 123456787
+  favorite_number: 34
+
+joan:
+  id: 3
+  first_name: "Joan"
+  last_name: "Taylor"
+  occupation: "Doctor"
+  age: 56
+  phone: 876876895
+  favorite_number: 23
+
+tom:
+  id: 4
+  first_name: "Tom"
+  last_name:  "Fields"
+  occupation: "Student"
+  age: 24
+  phone: 2134324634
+  favorite_number: 34
+
+nathan2:
+  id: 5
+  first_name: "Nathan"
+  last_name:  "Goldberg"
+  occupation: "Lawyer"
+  age: 54
+  phone: 2453545435
+  favorite_number: 1000
+  

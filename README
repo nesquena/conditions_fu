@@ -1,6 +1,21 @@
 ConditionsFu
 ============
 
+Install
+=======
+
+To install this plugin, simply do a git clone of this repository
+
+  $ cd my/rails/app
+  $ git clone git://github.com/xgamerx/conditions_fu.git vendor/plugins/conditions_fu
+
+Or in Rails 2.1, install it with the new git rails plugin support:
+
+  $ script/plugin install git://github.com/xgamerx/conditions_fu.git
+
+Overview
+========
+
 Recently, I had the pleasure of trying Merb with the DataMapper ORM which is an alternative to ActiveRecord. As I began using DataMapper, there was a particular feature that I grew quite fond of which involves the ability to construct a condition hash for the find method in the model which contains relatively complex logic. The tutorial in DataMapper gives this example:
 
   http://datamapper.org/why.html

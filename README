@@ -1,13 +1,53 @@
 ConditionsFu
 ============
 
-Introduction goes here.
+Recently, I had the pleasure of trying Merb with the DataMapper ORM which is an alternative to ActiveRecord. As I began using DataMapper, there was a particular feature that I grew quite fond of which involves the ability to construct a condition hash for the find method in the model which contains relatively complex logic. The tutorial in DataMapper gives this example:
 
+  http://datamapper.org/why.html
+
+  # 'gt' means greater-than. We also do 'lt'.
+  Person.all(:age.gt => 30, :name.like => "%name%")
+  
+I decided that I would try to port this feature to ActiveRecord but without breaking any backwards compatibility and adapting the syntax to fit the ActiveRecord style. I came up with this:
+
+  Person.find(:all, :conditions => { :age.gt => 30, :name.like => "%name%" })
+  
+Very similar to DataMapper syntax but with the active_record conditions hash that we all love. Of course, I developed this plugin with Rails 2.1 in mind, so all the syntactic sugar is still there:
+
+  Person.all(:conditions => { :age.gt => 30, :name.like => "%name%" })
+  
+The basic idea is you can use the operators to specify more complex queries than what used to be possible. Less SQL and more Ruby!
+
+Here are the basic operators that are supported:
+
+  Equal               -> :eql
+  Less Than           -> :lt   
+  Less Than Equal     -> :lte
+  Greater Than        -> :gt   
+  Greater Than Equal  -> :gte  
+  Like                -> :like 
+  In                  -> :in
+  Not In              -> :not
+
+As an added bonus, there is also an "OR" version which basically checks for records for which *any* of the conditions are true:
+
+  Person.any(:conditions => { :age.gt => 30, :name.like => "%name%" })
+
+The Plugin is fully compatible with Rails 2.1 and has been tested fairly well. Note that this is still a very rough release but I hope to make this robust enough to eventually be included in activerecord core. I welcome any suggestions!
 
 Example
 =======
 
-Example goes here.
+Here are a bunch of examples:
 
+Person.find(:all, :conditions => { :age.gt => 30, :name.like => "%name%" })
+Person.any(:conditions => { :name      => "Bob", :age.gt => 25 }) # returns all records that match 'any' condition
+Person.all(:conditions => { :name      => "Bob", :age.gt => 25 }) # returns all records that match 'all' conditions
+Person.all(:conditions => { :name.eql  => "Bob", :age.gt => 25 })
+Person.all(:conditions => { :name.like => "%ob%", :age.lte => 55 })
+Person.all(:conditions => { :name.like => "%ob%", :age.in => [55, 56, 57] })
+Person.all(:conditions => { :name.like => "%ob%", :age.not => [55, 56, 57] })
 
-Copyright (c) 2008 [name of plugin creator], released under the MIT license
+Thanks to the DataMapper developers for the inspiration for this plugin! I owe the idea all to them.
+
+Copyright (c) 2008 Nathan Esquenazi, released under the MIT license

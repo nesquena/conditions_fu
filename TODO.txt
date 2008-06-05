@@ -1,0 +1,19 @@
+- make it work with objects that include all types of eager loaded associations (?)
+- make it work on finds that are not find(:all) [ i.e find(:first) ]
+
+
+=== Notes on Find Hierarchy ===
+
+activerecord/base.rb
+  find (line 528)
+    find_every (line 1335)
+      construct_finder_sql (line 1472)
+        add_conditions! (line 1571)
+            merge_conditions (line 1488)
+              sanitize_sql_for_conditions (line 1939)
+                sanitize_sql_hash_for_conditions (line 2008)
+                   attribute_condition (line 1722)
+            
+
+activerecord/associations
+  find_with_associations (line 1247)

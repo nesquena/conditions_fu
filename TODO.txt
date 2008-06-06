@@ -1,4 +1,5 @@
 - make it work with objects that include all types of eager loaded associations (?)
+- include support for joined or included attributes (?)
 
 === Notes on Find Hierarchy ===
 

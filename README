@@ -1,6 +1,10 @@
 ConditionsFu
 ============
 
+ActiveRecord Conditions Hash Enhancer
+
+This plugin enhances a few parts of the internals of ActiveRecord::Base#find to allow for the supplied conditions hash to accepts additional query constraints.
+
 Install
 =======
 
@@ -23,7 +27,7 @@ Recently, I had the pleasure of trying Merb with the DataMapper ORM which is an 
   # 'gt' means greater-than. We also do 'lt'.
   Person.all(:age.gt => 30, :name.like => "%name%")
   
-I decided that I would try to port this feature to ActiveRecord but without breaking any backwards compatibility and adapting the syntax to fit the ActiveRecord style. I came up with this:
+I decided that I would try to port this feature to ActiveRecord but without breaking any backwards compatibility and with adapting the syntax to fit the ActiveRecord style. I came up with this:
 
   Person.find(:all, :conditions => { :age.gt => 30, :name.like => "%name%" })
   
@@ -31,37 +35,48 @@ Very similar to DataMapper syntax but with the active_record conditions hash tha
 
   Person.all(:conditions => { :age.gt => 30, :name.like => "%name%" })
   
-The basic idea is you can use the operators to specify more complex queries than what used to be possible. Less SQL and more Ruby!
+You can use the operators by applying them directly to the symbol name to specify more complex queries than what used to be possible. Less SQL and more Ruby is always a plus!
 
 Here are the basic operators that are supported:
 
-  Equal               -> :eql
-  Less Than           -> :lt   
-  Less Than Equal     -> :lte
-  Greater Than        -> :gt   
-  Greater Than Equal  -> :gte  
-  Like                -> :like 
-  In                  -> :in
-  Not In              -> :not
+  Equal                  -> :eql
+  Less Than              -> :lt   
+  Less Than Or Equal     -> :lte
+  Greater Than           -> :gt   
+  Greater Than Or Equal  -> :gte  
+  Like                   -> :like 
+  In                     -> :in
+  Not In                -> :not
 
-As an added bonus, there is also an "OR" version which basically checks for records for which *any* of the conditions are true:
+In addition, there is also an "OR" version which returns all records for which *any* of the conditions are true:
 
   Person.any(:conditions => { :age.gt => 30, :name.like => "%name%" })
 
-The Plugin is fully compatible with Rails 2.1 and has been tested fairly well. Note that this is still a very rough release but I hope to make this robust enough to eventually be included in activerecord core. I welcome any suggestions!
+The Plugin is fully compatible with Rails 2.1 and has been tested. However, Note that this is still a very rough release but I hope to make this robust enough to eventually be included in activerecord core. I welcome any comments, patches or suggestions!
 
-Example
-=======
+Usage
+=====
 
-Here are a bunch of examples:
+Below are example usages for this plugin:
+
+# First
+
+Person.first(:conditions =>  { :last_seen.gt => 2.days.ago, :name.not => ['Joe'] })
+Message.first(:conditions => { :created_at.gt => 2.days.ago, :message.like => "%rails%" })
+
+# All
 
 Person.find(:all, :conditions => { :age.gt => 30, :name.like => "%name%" })
-Person.any(:conditions => { :name      => "Bob", :age.gt => 25 }) # returns all records that match 'any' condition
 Person.all(:conditions => { :name      => "Bob", :age.gt => 25 }) # returns all records that match 'all' conditions
 Person.all(:conditions => { :name.eql  => "Bob", :age.gt => 25 })
 Person.all(:conditions => { :name.like => "%ob%", :age.lte => 55 })
 Person.all(:conditions => { :name.like => "%ob%", :age.in => [55, 56, 57] })
 Person.all(:conditions => { :name.like => "%ob%", :age.not => [55, 56, 57] })
+
+#Any
+
+Person.any(:conditions => { :name => "Bob", :age.gt => 25 }) # returns all records that match 'any' condition
+Message.any(:conditions => { :created_at.gt => 2.days.ago, :message.like => "%rails%" })
 
 Thanks to the DataMapper developers for the inspiration for this plugin! I owe the idea all to them.
 

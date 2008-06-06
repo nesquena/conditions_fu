@@ -1,6 +1,4 @@
 - make it work with objects that include all types of eager loaded associations (?)
-- make it work on finds that are not find(:all) [ i.e find(:first) ]
-
 
 === Notes on Find Hierarchy ===
 

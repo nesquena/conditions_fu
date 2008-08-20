@@ -78,6 +78,6 @@ Person.all(:conditions => { :name.like => "%ob%", :age.not => [55, 56, 57] })
 Person.any(:conditions => { :name => "Bob", :age.gt => 25 }) # returns all records that match 'any' condition
 Message.any(:conditions => { :created_at.gt => 2.days.ago, :message.like => "%rails%" })
 
-Thanks to the DataMapper developers for the inspiration for this plugin! I owe the idea all to them.
+Thanks to the DataMapper developers for the inspiration for this plugin! I owe the idea all to their ingenuity.
 
 Copyright (c) 2008 Nathan Esquenazi, released under the MIT license

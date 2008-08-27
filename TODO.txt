@@ -1,5 +1,6 @@
 - make 'any' work even when the same attribute_query is specified twice: 
-  * Person.any(:conditions => { :first_name.eql => "Bob", :first_name.eql => "Nathan" })
+  * Person.any(:conditions => { :first_name.eql => "Bob", :first_name.eql => "Nathan" }) (?)
+  * Person.any(:conditions => { :first_name.eql => ["Bob", "Nathan"] })
 - make it work with objects that include all types of eager loaded associations (?)
 - include support for joined or included attributes (?)
 

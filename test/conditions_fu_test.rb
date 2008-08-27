@@ -60,7 +60,7 @@ class ConditionsFuTest < Test::Unit::TestCase
     assert_equal [@bob, @tom],  Person.all(:conditions => { :favorite_number.eql => 34 })
     assert_equal [@nathan],  Person.all(:conditions => { :first_name.eql => "Nathan", :last_name.eql => "Esquenazi" })
     assert_equal @nathan,  Person.first(:conditions => { :first_name.eql => "Nathan", :last_name.eql => "Esquenazi" })
-    # assert_equal [@nathan, @bob, @nathan2], Person.any(:conditions => { :first_name.eql => "Bob", :first_name.eql => "Nathan" })
+    assert_equal [@nathan, @bob, @nathan2], Person.any(:conditions => { :last_name.eql => "Villa", :first_name.eql => "Nathan" })
   end
 
   def test_like_should_work
@@ -70,7 +70,7 @@ class ConditionsFuTest < Test::Unit::TestCase
     assert_equal [@nathan, @nathan2], Person.all(:conditions => { :first_name.like => "Nat%" })
     assert_equal [@nathan, @bob, @joan, @tom], Person.all(:conditions => { :occupation.like => "%t%" })
     assert_equal [], Person.all(:conditions => { :first_name.like => "Nat" })
-    # assert_equal [@nathan, @bob, @nathan2], Person.any(:conditions => { :first_name.like => "%Bo%", :first_name.like => "%Nat%" })
+    assert_equal [@nathan, @bob, @nathan2], Person.any(:conditions => { :last_name.like => "%Vil%", :first_name.like => "%Nat%" })
   end
 
   def test_less_than_should_work

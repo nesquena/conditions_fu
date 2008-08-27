@@ -15,6 +15,29 @@ class ConditionsFuTest < Test::Unit::TestCase
     @tom     =  Person.find(4)
     @nathan2 =  Person.find(5)
   end
+  
+  # conditions_fu attribute condition tests
+  
+  def test_two_attribute_conditions_with_same_attribute_and_operator_are_equal
+    # tests that two attribute conditions that have the same operator are equal
+    condition_a = :first_name.eql
+    condition_b = :first_name.eql
+    assert_equal condition_a, condition_b
+  end
+  
+  def test_two_attribute_conditions_with_same_attribute_and_different_operator_are_not_equal
+    # tests that two attribute conditions that have a different operator are not equal
+    condition_a = :first_name.eql
+    condition_b = :first_name.in
+    assert_not_equal condition_a, condition_b
+  end
+  
+  def test_two_attribute_conditions_with_different_attribute_and_same_operator_are_not_equal
+    # tests that two attribute conditions that have a different operator are not equal
+    condition_a = :first_name.eql
+    condition_b = :last_name.eql
+    assert_not_equal condition_a, condition_b
+  end
 
   # conditions_fu plugin tests
 

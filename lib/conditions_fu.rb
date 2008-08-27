@@ -77,8 +77,8 @@ module ConditionsFu
   
   # An attribute condition simply contains an attribute name as well as a condition operator
   class AttributeCondition
-    # attr_name : String => the attribute that will be used in the condition
-    # operator  : Symbol => the operator which will be used for comparison (i.e :gt, :lt, :like, :eql)
+    # attr_name : String => the attribute that will be used in the condition (i.e :name, :age, ...)
+    # operator  : Symbol => the operator which will be used for comparison (i.e :gt, :lt, :like, :eql, ...)
     attr_accessor :attribute_name, :condition_operator
   
     def initialize(attribute_name, condition_operator)
@@ -93,6 +93,16 @@ module ConditionsFu
     # returns the attribute name as a symbol
     def to_sym
       @attribute_name.to_sym
+    end
+    
+    # redefines comparison for attribute condition objects if the attribute name and operator are the same
+    def <=>(other)
+      [self.condition_operator.to_s, self.attribute_name.to_s] <=> [other.condition_operator.to_s, other.attribute_name.to_s]
+    end  
+    
+    # redefines equality within the ruby objects based on the new comparison operator
+    def ==(other)
+      (self <=> other) == 0
     end
   end
 end

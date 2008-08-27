@@ -104,5 +104,13 @@ module ConditionsFu
     def ==(other)
       (self <=> other) == 0
     end
+    
+    def eql?(other)
+      self.hash == other.hash
+    end
+
+    def hash
+      ["AttributeCondition", self.condition_operator.to_s, self.attribute_name.to_s].hash
+    end
   end
 end

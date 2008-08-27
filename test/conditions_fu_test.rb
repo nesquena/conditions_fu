@@ -15,28 +15,40 @@ class ConditionsFuTest < Test::Unit::TestCase
     @tom     =  Person.find(4)
     @nathan2 =  Person.find(5)
   end
-  
+
   # conditions_fu attribute condition tests
-  
+
   def test_two_attribute_conditions_with_same_attribute_and_operator_are_equal
     # tests that two attribute conditions that have the same operator are equal
     condition_a = :first_name.eql
     condition_b = :first_name.eql
     assert_equal condition_a, condition_b
   end
-  
+
   def test_two_attribute_conditions_with_same_attribute_and_different_operator_are_not_equal
     # tests that two attribute conditions that have a different operator are not equal
     condition_a = :first_name.eql
     condition_b = :first_name.in
     assert_not_equal condition_a, condition_b
   end
-  
+
   def test_two_attribute_conditions_with_different_attribute_and_same_operator_are_not_equal
     # tests that two attribute conditions that have a different operator are not equal
     condition_a = :first_name.eql
     condition_b = :last_name.eql
     assert_not_equal condition_a, condition_b
+  end
+
+  def test_two_attribute_conditions_with_same_attribute_and_operator_are_equal_in_hash
+    condition_hash_a = { :conditions => { :first_name.eql => "matt" } }
+    condition_hash_b = { :conditions => { :first_name.eql => "matt" } }
+    assert_equal condition_hash_a, condition_hash_b
+  end
+  
+  def test_two_attribute_conditions_with_same_attribute_and_different_operator_are_not_equal_in_hash
+    condition_hash_a = { :conditions => { :first_name.eql => "matt" } }
+    condition_hash_b = { :conditions => { :first_name.like => "matt" } }
+    assert_not_equal condition_hash_a, condition_hash_b
   end
 
   # conditions_fu plugin tests
@@ -48,7 +60,7 @@ class ConditionsFuTest < Test::Unit::TestCase
     assert_equal [@bob, @tom],  Person.all(:conditions => { :favorite_number.eql => 34 })
     assert_equal [@nathan],  Person.all(:conditions => { :first_name.eql => "Nathan", :last_name.eql => "Esquenazi" })
     assert_equal @nathan,  Person.first(:conditions => { :first_name.eql => "Nathan", :last_name.eql => "Esquenazi" })
-    assert_equal [@nathan, @bob, @nathan2], Person.any(:conditions => { :first_name.eql => "Bob", :first_name.eql => "Nathan" })
+    # assert_equal [@nathan, @bob, @nathan2], Person.any(:conditions => { :first_name.eql => "Bob", :first_name.eql => "Nathan" })
   end
 
   def test_like_should_work
@@ -58,7 +70,7 @@ class ConditionsFuTest < Test::Unit::TestCase
     assert_equal [@nathan, @nathan2], Person.all(:conditions => { :first_name.like => "Nat%" })
     assert_equal [@nathan, @bob, @joan, @tom], Person.all(:conditions => { :occupation.like => "%t%" })
     assert_equal [], Person.all(:conditions => { :first_name.like => "Nat" })
-    assert_equal [@nathan, @bob, @nathan2], Person.any(:conditions => { :first_name.like => "%Bo%", :first_name.like => "%Nat%" })
+    # assert_equal [@nathan, @bob, @nathan2], Person.any(:conditions => { :first_name.like => "%Bo%", :first_name.like => "%Nat%" })
   end
 
   def test_less_than_should_work

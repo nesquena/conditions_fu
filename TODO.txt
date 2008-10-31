@@ -7,14 +7,14 @@
 === Notes on Find Hierarchy ===
 
 activerecord/base.rb
-  find (line 528)
-    find_every (line 1335)
-      construct_finder_sql (line 1472)
-        add_conditions! (line 1571)
-            merge_conditions (line 1488)
-              sanitize_sql_for_conditions (line 1939)
-                sanitize_sql_hash_for_conditions (line 2008)
-                   attribute_condition (line 1722)
+  find (line 581)
+    find_every (line 1484)
+      construct_finder_sql (line 1615)
+        add_conditions! (line 1729)
+            merge_conditions (line 1436)
+              sanitize_sql_for_conditions (line 2068)
+                sanitize_sql_hash_for_conditions (line 2139)
+                   attribute_condition (line 1855)
             
 
 activerecord/associations

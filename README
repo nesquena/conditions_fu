@@ -13,7 +13,7 @@ To install this plugin, simply do a git clone of this repository
   $ cd my/rails/app
   $ git clone git://github.com/xgamerx/conditions_fu.git vendor/plugins/conditions_fu
 
-Or in Rails 2.1, install it with the new git rails plugin support:
+Or in Rails >= 2.1, install it with the new git rails plugin support:
 
   $ script/plugin install git://github.com/xgamerx/conditions_fu.git
 
@@ -52,7 +52,7 @@ In addition, there is also an "OR" version which returns all records for which *
 
   Person.any(:conditions => { :age.gt => 30, :name.like => "%name%" })
 
-The Plugin is fully compatible with Rails 2.1 and has been tested. However, Note that this is still a very rough release but I hope to make this robust enough to eventually be included in activerecord core. I welcome any comments, patches or suggestions!
+The Plugin is fully compatible with Rails 2.1 and 2.2 and has been tested. However, Note that this is still a very rough release. I welcome any comments, patches or suggestions!
 
 Usage
 =====

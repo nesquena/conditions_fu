@@ -39,14 +39,15 @@ module ConditionsFu
 
       # in the case that the attribute is actually a query object, determine the query type
       op = case attribute_query.condition_operator # (i.e :gt, :lt, :like, :eql)
-        when :eql   then "= ?"
-        when :lt    then "< ?"
-        when :lte   then "<= ?"
-        when :gt    then "> ?"
-        when :gte   then ">= ?"
-        when :like  then "LIKE ?"
-        when :in    then "IN (?)"
-        when :not   then "NOT IN (?)"
+        when :eql     then "= ?"
+        when :lt      then "< ?"
+        when :lte     then "<= ?"
+        when :gt      then "> ?"
+        when :gte     then ">= ?"
+        when :like    then "LIKE ?"
+        when :in      then "IN (?)"
+        when :not     then "NOT IN (?)"
+        when :regexp  then "REGEXP ?"
       end
       "#{column} #{op}"
     end
@@ -70,7 +71,7 @@ module ConditionsFu
 
   # define symbol methods for each possible condition qualifier
   module SymbolQueryExtensions
-    [ :eql, :lt, :gt, :gte, :lte, :in, :like, :not, :match ].each do |query_operator|
+    [ :eql, :lt, :gt, :gte, :lte, :in, :like, :not, :match, :regexp ].each do |query_operator|
       define_method(query_operator) do
         AttributeCondition.new(self, query_operator)
       end

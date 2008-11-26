@@ -3,25 +3,28 @@ module ConditionsFu
     # overriden sanitization in order to highjack the way that the condition string is formed
     # the attribute_condition method needs to have the attribute query object in order to
     # determine which operator to apply for the condition
-    def sanitize_sql_hash_for_conditions_with_attribute_queries(attrs)
+    # alias_method_chain :sanitize_sql_hash_for_conditions, :attribute_queries
+    def sanitize_sql_hash_for_conditions_with_attribute_queries(attrs, table_name = quoted_table_name)
       condition_join_string = attrs.delete(:connect) || ' AND ' # ' OR ' or ' AND '
       attrs = expand_hash_conditions_for_aggregates(attrs)
       # view_statement("[sanitize] initial attrs", attrs)
 
       conditions = attrs.map do |attr, value|
-        attr_string = attr.to_s
+        unless value.is_a?(Hash)
+          attr_string = attr.to_s
 
-        # Extract table name from qualified attribute names.
-        if attr_string.include?('.')
-          table_name, attr_string = attr_string.split('.', 2)
-          table_name = connection.quote_table_name(table_name)
+          # Extract table name from qualified attribute names.
+          if attr_string.include?('.')
+            table_name, attr_string = attr_string.split('.', 2)
+            table_name = connection.quote_table_name(table_name)
+          end
+        
+          # Here is the where the difference occurs: attribute_condition_for_query takes in the attr object
+          # table_name.`quoted_attribute_name` [result of attribute_condition_for_query]
+          "#{table_name}.#{connection.quote_column_name(attr_string)} #{attribute_condition_for_query(attr, value)}"
         else
-          table_name = quoted_table_name
+          sanitize_sql_hash_for_conditions(value, connection.quote_table_name(attr.to_s))
         end
-
-        # Here is the where the difference occurs: attribute_condition_for_query takes in the attr object
-        # table_name.`quoted_attribute_name` [result of attribute_condition_for_query]
-        attribute_condition_for_query("#{table_name}.#{connection.quote_column_name(attr_string)}", attr, value)
       end.join(condition_join_string)
 
       # view_statement("[sanitize] conditions", conditions)

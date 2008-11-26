@@ -18,10 +18,10 @@ module ConditionsFu
             table_name, attr_string = attr_string.split('.', 2)
             table_name = connection.quote_table_name(table_name)
           end
-        
+
           # Here is the where the difference occurs: attribute_condition_for_query takes in the attr object
           # table_name.`quoted_attribute_name` [result of attribute_condition_for_query]
-          "#{table_name}.#{connection.quote_column_name(attr_string)} #{attribute_condition_for_query(attr, value)}"
+          attribute_condition_for_query("#{table_name}.#{connection.quote_column_name(attr_string)}", attr, value)
         else
           sanitize_sql_hash_for_conditions(value, connection.quote_table_name(attr.to_s))
         end

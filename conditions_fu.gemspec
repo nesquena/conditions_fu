@@ -2,14 +2,14 @@
 
 Gem::Specification.new do |s|
   s.name = %q{conditions_fu}
-  s.version = "0.2.0"
+  s.version = "0.2.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Nathan Esquenazi", "Jeff Smick"]
   s.date = %q{2009-01-29}
   s.description = %q{README}
   s.email = %q{sprsquish@gmail.com}
-  s.files = ["TODO.txt", "VERSION.yml", "lib/conditions_fu.rb", "test/conditions_fu_test.rb", "test/database.yml", "test/fixtures", "test/fixtures/people.yml", "test/schema.rb", "test/test_helper.rb"]
+  s.files = ["init.rb", "TODO.txt", "VERSION.yml", "lib/conditions_fu.rb", "test/conditions_fu_test.rb", "test/database.yml", "test/fixtures", "test/fixtures/people.yml", "test/schema.rb", "test/test_helper.rb"]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/sprsquish/conditions_fu}
   s.rdoc_options = ["--inline-source", "--charset=UTF-8"]

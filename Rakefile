@@ -1,22 +1,13 @@
-require 'rake'
-require 'rake/testtask'
-require 'rake/rdoctask'
-
-desc 'Default: run unit tests.'
-task :default => :test
-
-desc 'Test the conditions_fu plugin.'
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = true
-end
-
-desc 'Generate documentation for the conditions_fu plugin.'
-Rake::RDocTask.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'ConditionsFu'
-  rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |s|
+    s.name = 'conditions_fu'
+    s.summary = 'README'
+    s.email = 'sprsquish@gmail.com'
+    s.homepage = 'http://github.com/sprsquish/conditions_fu'
+    s.description = 'README'
+    s.authors = ['Nathan Esquenazi', 'Jeff Smick']
+  end
+rescue LoadError
+  puts 'Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com'
 end

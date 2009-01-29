@@ -7,6 +7,8 @@ begin
     s.homepage = 'http://github.com/sprsquish/conditions_fu'
     s.description = 'README'
     s.authors = ['Nathan Esquenazi', 'Jeff Smick']
+
+    s.files = FileList['init.rb', "[A-Z]*.*", "{bin,generators,lib,test,spec}/**/*"]
   end
 rescue LoadError
   puts 'Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com'

@@ -37,7 +37,7 @@ module ConditionsFu
     # the actual operator is determined by the attribute_query type ( i.e :name.gt => '>' )
     def attribute_condition_for_query(column, attribute_query, value)
       # immediately return to regularly scheduled programming if the attribute is a plain old symbol
-      return "#{column} #{attribute_condition(value)}" unless attribute_query.kind_of?(AttributeCondition)
+      return attribute_condition(column, value) unless attribute_query.kind_of?(AttributeCondition)
       return "MATCH(#{column}) AGAINST(? IN BOOLEAN MODE)" if attribute_query.condition_operator == :match
 
       # in the case that the attribute is actually a query object, determine the query type

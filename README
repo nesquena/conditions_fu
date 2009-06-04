@@ -5,6 +5,11 @@ ActiveRecord Conditions Hash Enhancer
 
 This plugin enhances a few parts of the internals of ActiveRecord::Base#find to allow for the supplied conditions hash to accepts additional query constraints.
 
+Important Note
+==============
+
+To be honest, I liked this idea when I implemented it and it seemed an elegant way to express the non-equality conditions but I see now that there are many problems with this such as the sloppy need to extend symbol with garbage methods. I will admit this experiment to add datamapper query hash to activerecord was not a stellar idea. If you like this I recommend checking out RecordFilter (http://aub.github.com/record_filter/) or Thoughtbot's Squirrel or Ambition. I will keep this up as a reference on how to extend ActiveRecord and in case anyone wants to continue using it. 
+
 Install
 =======
 
